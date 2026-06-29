@@ -1,33 +1,136 @@
-function orderNow(){
-    let name = document.getElementById("name").value;
-    let address = document.getElementById("address").value;
-    let phone = document.getElementById("phone").value;
-    
-    // Check if fields are empty
-    if(!name || !address || !phone){
-        alert("Please fill all fields!");
-        return;
-    }
-    
-    // If cart is empty, prevent ordering
-    if(cart.length === 0){
-        alert("Your cart is empty!");
-        return;
-    }
-    
-    let shopNumber = "8801817466008"; // Put your actual WhatsApp number here
-    
-    // Construct the plain text message with clean line breaks
-    let msg = "🍗 Chicken House Order 🍗\n\n" +
-              "Name: " + name + "\n" +
-              "Phone: " + phone + "\n" +
-              "Address: " + address + "\n\n" +
-              "Items:\n" + cart.map(item => "- " + item).join("\n") + "\n\n" + 
-              "Total: $" + total;
-    
-    // Safely encode the message to convert spaces and newlines into valid URL characters
-    let encodedMsg = encodeURIComponent(msg);
-    
-    // Open the valid WhatsApp link
-    window.open("https://wa.me/" + shopNumber + "?text=" + encodedMsg, "_blank");
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chicken House Shop</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#fff7e6}
+header{background:#d32f2f;color:#fff;padding:15px;text-align:center}
+.container{padding:15px}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:10px}
+button{padding:8px 12px;margin:5px;cursor:pointer}
+.cart{background:#222;color:#fff;padding:10px;border-radius:10px}
+input, textarea{
+width:100%;padding:8px;margin:5px 0;border:1px solid #ccc;border-radius:5px;
 }
+.lang{text-align:center;margin:10px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🐔 Chicken House</h1>
+<p id="tag">Fresh Chicken Shop</p>
+</header>
+
+<div class="lang">
+<button onclick="setLang('en')">English</button>
+<button onclick="setLang('bn')">বাংলা</button>
+</div>
+
+<div class="container">
+
+<!-- PRODUCTS -->
+<div class="card">
+<h3>🍗 <span id="item1">Grilled Chicken</span> - 5$</h3>
+<button onclick="addItem('Grilled Chicken',5)">Add</button>
+</div>
+
+<div class="card">
+<h3>🍗 <span id="item2">Fried Chicken</span> - 4$</h3>
+<button onclick="addItem('Fried Chicken',4)">Add</button>
+</div>
+
+<div class="card">
+<h3>🍔 <span id="item3">Chicken Burger</span> - 3$</h3>
+<button onclick="addItem('Chicken Burger',3)">Add</button>
+</div>
+
+<!-- CHECKOUT FORM -->
+<div class="card">
+<h3 id="checkoutTitle">Checkout</h3>
+
+<input type="text" id="name" placeholder="Your Name">
+<textarea id="address" placeholder="Your Address"></textarea>
+<input type="text" id="phone" placeholder="Phone Number">
+
+</div>
+
+<!-- CART -->
+<div class="cart">
+<h3 id="cartTitle">Cart</h3>
+<ul id="cart"></ul>
+<p><b>Total: $<span id="total">0</span></b></p>
+
+<button onclick="orderNow()">📱 Place Order</button>
+</div>
+
+</div>
+
+<script>
+
+let cart = [];
+let total = 0;
+
+function addItem(name, price){
+cart.push(name + " - $" + price);
+total += price;
+renderCart();
+}
+
+function renderCart(){
+document.getElementById("cart").innerHTML =
+cart.map(i => "<li>"+i+"</li>").join("");
+document.getElementById("total").innerText = total;
+}
+
+function orderNow(){
+
+let name = document.getElementById("name").value;
+let address = document.getElementById("address").value;
+let phone = document.getElementById("phone").value;
+
+if(!name || !address || !phone){
+alert("Please fill all fields!");
+return;
+}
+
+let shopNumber = "8801817466008"; // তোমার WhatsApp নাম্বার
+
+let msg =
+"🐔 Chicken House Order%0A%0A" +
+"Name: " + name + "%0A" +
+"Phone: " + phone + "%0A" +
+"Address: " + address + "%0A%0A" +
+"Items:%0A" + cart.join("%0A") + "%0A%0A" +
+"Total: $" + total;
+
+window.open("https://wa.me/"+shopNumber+"?text="+msg,"_blank");
+}
+
+function setLang(lang){
+if(lang==="bn"){
+document.getElementById("tag").innerText="তাজা চিকেন শপ";
+document.getElementById("checkoutTitle").innerText="চেকআউট";
+document.getElementById("cartTitle").innerText="কার্ট";
+document.getElementById("item1").innerText="গ্রিল চিকেন";
+document.getElementById("item2").innerText="ফ্রাইড চিকেন";
+document.getElementById("item3").innerText="চিকেন বার্গার";
+}
+else{
+document.getElementById("tag").innerText="Fresh Chicken Shop";
+document.getElementById("checkoutTitle").innerText="Checkout";
+document.getElementById("cartTitle").innerText="Cart";
+document.getElementById("item1").innerText="Grilled Chicken";
+document.getElementById("item2").innerText="Fried Chicken";
+document.getElementById("item3").innerText="Chicken Burger";
+}
+}
+
+</script>
+
+</body>
+</html>
