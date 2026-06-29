@@ -1,0 +1,33 @@
+function orderNow(){
+    let name = document.getElementById("name").value;
+    let address = document.getElementById("address").value;
+    let phone = document.getElementById("phone").value;
+    
+    // Check if fields are empty
+    if(!name || !address || !phone){
+        alert("Please fill all fields!");
+        return;
+    }
+    
+    // If cart is empty, prevent ordering
+    if(cart.length === 0){
+        alert("Your cart is empty!");
+        return;
+    }
+    
+    let shopNumber = "8801XXXXXXXXX"; // Put your actual WhatsApp number here
+    
+    // Construct the plain text message with clean line breaks
+    let msg = "🍗 Chicken House Order 🍗\n\n" +
+              "Name: " + name + "\n" +
+              "Phone: " + phone + "\n" +
+              "Address: " + address + "\n\n" +
+              "Items:\n" + cart.map(item => "- " + item).join("\n") + "\n\n" + 
+              "Total: $" + total;
+    
+    // Safely encode the message to convert spaces and newlines into valid URL characters
+    let encodedMsg = encodeURIComponent(msg);
+    
+    // Open the valid WhatsApp link
+    window.open("https://wa.me/" + shopNumber + "?text=" + encodedMsg, "_blank");
+}
